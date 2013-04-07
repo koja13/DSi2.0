@@ -1,0 +1,62 @@
+#topDiv
+{
+	font-family:Tahoma;
+	font-size:13px;
+	height:15%;
+	border-bottom: #BAB5B5 4px solid;
+	overflow: hidden;
+}
+
+#topDivLeft
+{
+	font-family:Tahoma;
+	font-size:13px;
+	height:100%;
+	width:50%;
+	float:left;
+}
+
+#topDivRight
+{
+	font-family:Tahoma;
+	font-size:13px;
+	text-align:right;
+	height:100%;
+	width:49%;
+	float:left;
+}
+
+#mainDiv
+{
+	overflow:auto;
+	font-family:Tahoma;
+	font-size:13px;
+	height:70%;
+}
+
+#bottomDiv
+{
+	font-family:Tahoma;
+	font-size:13px;
+	height:15%;
+	border-top: #BAB5B5 4px solid;
+	overflow: hidden;
+}
+#bottomDivLeft
+{
+	font-family:Tahoma;
+	font-size:13px;
+	height:100%;
+	width:50%;
+	float:left;
+}
+
+#bottomDivRight
+{
+	font-family:Tahoma;
+	font-size:13px;
+	height:100%;
+	width:49%;
+	border-left: #BAB5B5 4px solid;
+	float:left;
+}
