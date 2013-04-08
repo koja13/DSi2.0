@@ -5,7 +5,7 @@
 		function readText($par)
 		{
 			$this->load->helper('file');
-			$tekstIzFajla = read_file("./tekstovi/" . $par);
+			$tekstIzFajla = read_file("./textFiles/" . $par);
 			return $tekstIzFajla;
 		}
 		
@@ -15,7 +15,7 @@
 			$this->load->helper('file');
 			$data = $tekst;
 			
-			if ( ! write_file('./tekstovi/' . $imeFajla, $data))
+			if ( ! write_file('./textFiles/' . $imeFajla, $data))
 			{
 				echo 'Unable to save file to the server!';
 			}
@@ -25,20 +25,7 @@
 			}
 			
 		}
-		/*
-		function saveText($str)
-		{
-			
-			$sql = "INSERT INTO Text (text)
-			VALUES ('".$str."')";
-			
-			$this->db->query($sql);
-			//$this->load->helper('file');
-			//$tekstIzFajla = read_file($par);
-			//return $tekstIzFajla;
-			
-			
-		}*/
+
 	}
 
 ?>

@@ -36,7 +36,7 @@
 
 <script type="text/javascript" src="<?php echo base_url('/assets/js/findAndReplaceDOMText.js');?>"></script>
 
-<script type="text/javascript" src="<?php echo base_url('/assets/js/Funkcije.js');?>"></script>
+<script type="text/javascript" src="<?php echo base_url('/assets/js/jsFunctions.js');?>"></script>
 
 <script type="text/javascript" src="<?php echo base_url('/assets/js/browserdetect.js');?>"></script>
 
@@ -48,7 +48,7 @@
 			
 			<!-- FORMA ZA UPLOAD TXT FAJLA, ovo je za sve ostale pretrazivace osim Chroma, ukoliko se ustanovi da je Chrome pretrazivac u kome je pokrenuta app onda se ova forma ne prikazuje -->
 			
-			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/EditController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
+			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/RdfController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
 			
 			<div id="divTextUploadId">
 			Dodajte tekst: 
@@ -64,7 +64,7 @@
 			
 			<!-- FORMA ZA UPLOAD RDF FAJLA -->
 			
-			<form id="formRdfUploadId" name="form" action="<?php echo site_url('/EditController/uploadRdfGraph');?>" method="POST" enctype="multipart/form-data" >
+			<form id="formRdfUploadId" name="form" action="<?php echo site_url('/RdfController/uploadRdfGraph');?>" method="POST" enctype="multipart/form-data" >
 			
 			<div id="divRdfUploadId">
 			Dodajte rdf model:

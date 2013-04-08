@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/DSi2.0v06/';
+$config['base_url']	= 'http://localhost/GitHub/DSi2.0/';
 
 /*
 |--------------------------------------------------------------------------
