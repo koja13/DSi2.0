@@ -19,40 +19,35 @@
 		// promenljiva koja cuva ime rdf modela, inicijalno je prazan string
 		var rdfGraphName = "";
 		
-		var rdfController = config.site_url + "/" + "RdfController";
+		// promenljiva koja cuva link ka rdf kontroleru, koristi se kod ajax poziva
+		var rdfController = config.site_url + "/RdfController";
+		
+		
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////    FUNKCIJE    ////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		
-		/////////////////////////    DEO SA POSTAVLJANJEM LINKA ZA READ MOD     ////////////////////////////
-		
-		//postavljanje osnovne putanje za link READ MODE, posle se samo dodaju imeTXT fajla, rdfGraphName
-		//document.getElementById('linkID').href = config.site_url + "/ReadController/index";
+		/////////////////////////    DEO SA POSTAVLJANJEM LINKA ZA OPPOSITE MOD     ////////////////////////////
 
-		
-		//postavljanje osnovne putanje za link EDIT MODE, posle se samo dodaju imeTXT fajla, rdfGraphName
-		document.getElementById('linkID').href = config.site_url + "/" + config.opposite_controller + "/index";
-		
 		
 		// funkcija koja postavlja link ka Read modu, tj na vec napravljeni link dodaje string koji se prosledi
 		function setLinkForOppositeMode(str)  
-		{      
-			document.getElementById('linkID').href = document.getElementById('linkID').href + str;
+		{
+			//postavljanje osnovne putanje za link EDIT MODE, posle se samo dodaju imeTXT fajla, rdfGraphName
+			$("#linkID").attr("href", config.site_url + "/" + config.opposite_controller + "/index" + str);
 		}
 
 		// poziv funkcije sa praznim stringom
 		setLinkForOppositeMode("");
-
-
-
-		
+	
 		
 		// funkcija koja postavlja link ka rdf kako bi mogao da bude downloadovan klikom na dugme
 		function setDownloadLinkForRdfGraph()
 		{
 			// kreiranje linka
-			window.location.href = config.base_url + "/" + rdfGraphName;
+			window.location.href = config.base_url + "rdfGraphs/" + rdfGraphName;
 			 
 			// skrivanje obavestenja o downloadu, bice prikazano tek nakon izmene
 			$("#downloadMessageSpanId").hide();
@@ -76,56 +71,13 @@
 			 var n = rdfGraphName.split("\\"); 
 			 rdfGraphName = n[2];
 
-			 // dobijanje imena modela za firefox, koristeci php funkciju
-			// <?php $ua=getBrowser();if($ua['name']=="Mozilla Firefox" ) echo "rdfGraphName = document.getElementById('my_file').value"?>
-
-		
 			// dobijanje imena modela za firefox, koristeci javascript biblioteku
 			if(BrowserDetect.browser=="Firefox")
 			{
 				rdfGraphName = document.getElementById('fileRdfId').value;
 			}
 
-			 // kreiranje linka za read mod
-			 document.getElementById('linkID').href = config.site_url + "/" + config.opposite_controller + "/index";
-
-			 if(textFileName=="")
-			 {
-				 // ukoliko tekstualni fajl ne postoji onda se na link dodaje samo naziv modela
-				setLinkForOppositeMode("/rdfGraphName/" + rdfGraphName.split(".rdf")[0]);
-			 }
-			 else
-			 {
-				 // ukoliko tekstualni fajl postoji
-				 
-				 // uzima se ime fajla iz globalne promenljive
-				 var str1 = textFileName; 
-
-				 // trazi se .txt u nazivu
-				 var n = str1.search(".txt");
-
-				 // u lokalnoj promenljivoj se cuva naziv fajla sa tekstom
-				 var textFileNameWithoutExtension = textFileName;
-				 
-				 if(n!=-1)
-				 {
-					// jeste txt fajl
-					 textFileNameWithoutExtension = textFileName.split(".txt")[0];
-					 textFileType = "txt";
-				 }
-				 else
-				 {
-					 // jeste html fajl
-					 textFileNameWithoutExtension = textFileName.split(".html")[0];
-					 textFileType = "html";
-				 }
-
-				// koji je tip fajla txt ili html
-					 var strLink = "textFileType/" + textFileType + "/";
-			
-				 // kreiranje linka za read mod tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, naziv modela, respektivno
-				 setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink + "rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
-			 }
+			addFileNamesToLink();
 			 
 			 if(config.controller=="ReadController")
 			 {
@@ -135,72 +87,85 @@
 			 }
 		}
 		
+		
 		// funkcija za upload txt fajla
 		function uploadTextFile()
 		{ 
+			document.getElementById('formTextUploadId').target = 'iFrameText'; //'iFrameText' is the name of the iframe
+			document.getElementById('formTextUploadId').submit();
 
+			// poziv ajax funkcije da ucita tekst iz uploadovanog fajla
+			textFileName = $('#filesTextId').val();
+			var n = textFileName .split("\\"); 
+			textFileName  = n[2];
+
+			// dobijanje imena fajla sa tekstom za firefox, koristeci javascript biblioteku
+			if(BrowserDetect.browser=="Firefox")
+			{
+				textFileName = document.getElementById('filesTextId').value;
+			}
+			
+			addFileNamesToLink();
+			
+			// pozivanje funkcije koja ucitava tekst iz fajla na serveru
+			loadTextFile(textFileName);
+		}
 		
+		
+		function addFileNamesToLink()
+		{ 
+			if(textFileName=="")
+			 {
+				if(rdfGraphName!="")
+				{
+					 // ukoliko tekstualni fajl ne postoji onda se na link dodaje samo naziv modela
+					setLinkForOppositeMode("/rdfGraphName/" + rdfGraphName.split(".rdf")[0]);	
+				}
+			 }
+			 else
+			 {
+				// ukoliko tekstualni fajl postoji
+				 
+				// uzima se ime fajla iz globalne promenljive
+				var str1 = textFileName; 
 
-					document.getElementById('formTextUploadId').target = 'iFrameText'; //'iFrameText' is the name of the iframe
-					 document.getElementById('formTextUploadId').submit();
+				// trazi se .txt u nazivu
+				var n = str1.search(".txt");
 
-
-					 // poziv ajax funkcije da ucita tekst iz uploadovanog fajla
-					 textFileName = $('#filesTextId').val();
-
-					 var n = textFileName .split("\\"); 
-					 textFileName  = n[0];
-
-					 // ovo je samo u slucaju firefoxa, zato sto na drugi nacin uzima naziv fajla
-					// <?php $ua=getBrowser();if($ua['name']=="Mozilla Firefox" ) echo "textFileName = document.getElementById('my_fileText').value"?>
-
-					// dobijanje imena fajla sa tekstom za firefox, koristeci javascript biblioteku
-					if(BrowserDetect.browser=="Firefox")
-					{
-						textFileName = document.getElementById('filesTextId').value;
-					}
-					 
-					 // postavljanje linka ka read modu
-					 document.getElementById('linkID').href = config.site_url+ "/" + config.opposite_controller + "/index";
-
-
-					 var str1 = textFileName; 
-					 var n = str1.search(".txt");
-
-					 var textFileNameWithoutExtension = textFileName;
-					 
-					 if(n!=-1)
-					 {
-						// jeste txt fajl
-						 textFileNameWithoutExtension = textFileName.split(".txt")[0];
-						 textFileType = "txt";
-					 }
-					 else
-					 {
-						 // jeste html fajl
-						 textFileNameWithoutExtension = textFileName.split(".html")[0];
-						 textFileType = "html";
-					 }
-
+				// u lokalnoj promenljivoj se cuva naziv fajla sa tekstom
+				var textFileNameWithoutExtension = textFileName;
+				 
+				if(n!=-1)
+				{
+					// jeste txt fajl
+					textFileNameWithoutExtension = textFileName.split(".txt")[0];
+					textFileType = "txt";
+				}
+				else
+				{
+					// jeste html fajl
+					textFileNameWithoutExtension = textFileName.split(".html")[0];
+					textFileType = "html";
+				}
 
 					// koji je tip fajla txt ili html
-					 var strLink = "textFileType/" + textFileType;
+				var strLink = "textFileType/" + textFileType + "/";//////////////////// PROVERI zbog kose crte
+			
+				if(rdfGraphName=="")
+				{
+					// ukoliko ne postoji model onda se link kreira tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, respektivno
+					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink);
+				}
+				else
+				{
+					// kreiranje linka za read mod tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, naziv modela, respektivno
+					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink + "/"+"rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
+				}
 
-					 if(rdfGraphName=="")
-					 {
-						 // ukoliko ne postoji model onda se link kreira tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, respektivno
-						 setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink);
-					 }
-					 else
-					 {
-						// kreiranje linka za read mod tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, naziv modela, respektivno
-						 setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink + "/"+"rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
-					 }
-
-					 // pozivanje funkcije koja ucitava tekst iz fajla na serveru
-					 loadTextFile(textFileName);
-
+			}
 		}
+		
+
 		
 		
 
@@ -312,7 +277,10 @@
 		subject=s;
 		object=o;
 
-		document.getElementById("bottomDivRight").innerHTML ="  <form name='form'> " + s + " <input type='text' id='predicateId' name='predicate' /> " + o + " <br /><input type='button' onclick='sendSubjectObjectPredicate(this.parentNode); ' value='Sacuvaj' /> </form>";
+		$("#bottomDivRight").html("<form name='form'> "
+									+ s + " <input type='text' id='predicateId' name='predicate' /> " + o + " <br />" +
+											"<input type='button' onclick='sendSubjectObjectPredicate(this.parentNode); ' value='Sacuvaj' />" +
+								 "</form>");
 	}
 
 	// funkcija koja salje subjekat i objekat serveru, i rezultat od servera upise u donji div levo
@@ -343,7 +311,10 @@
 		$.ajax({
 			  type: "POST",
 			  url: rdfController + "/getObjects",
-			  data: { s: subject, rdfGraph: rdfGraphName }
+			  data: {	
+				  		s: subject,
+						rdfGraph: rdfGraphName
+			  		}
 			}).done(function( response ) {
 
 			  $(response).css("background-color", "yellow");
@@ -368,19 +339,14 @@
 
 				if(config.controller=="EditController")
 				{
-					// obrise se sve iz donjeg levog diva
-					$("#bottomDivLeft").empty();
-
 					// u donji div levo se upisu sve veze koje vrati server
-					document.getElementById("bottomDivLeft").innerHTML+=response;
+					$("#bottomDivLeft").html(response);
 		
 				}
 				else if (config.controller=="ReadController")
 				{
 				
-					$("#bottomDiv").empty();
-					document.getElementById("bottomDiv").innerHTML+=response;
-		
+					$("#bottomDiv").html(response);
 				}
 				
 			});
@@ -392,7 +358,9 @@
 	function sendSubjectObjectPredicate(form)
 	{
 		predicate = form.predicate.value;
-		 		
+		
+ 		setRdfGraphName();
+ 		
 		if(predicate!="")
 		{
 			$.ajax({
@@ -407,7 +375,7 @@
 				}).done(function( response ) {
 					// ovde se obradjuje odgovor na zahtev koji se salje Ajaxom!
 		    		 
-			  		document.getElementById("bottomDivRight").innerHTML+=response;
+			  		$("#bottomDivRight").html($("#bottomDivRight").html() + response);
 	
 			  		// nakon upisivanja veze na serveru poziva se fja koja ponovo salje zahtev serveru sa odgovarajucim subjektom i objektom
 			  		// kako bi sve veze bile upisane u donji levi div
@@ -418,51 +386,36 @@
 	
 			 		// prikazuje se obavestenje da je moguce skinuti novu verziju modela
 			 		downloadMessage();
-	
-					// kreiranje linka za read mod
-					document.getElementById('linkID').href = config.site_url+"/" + config.opposite_controller + "/index";
-	
-					if(textFileName=="")
-					{
-						 // ukoliko ne postoji fajl sa tekstom onda se u link ka read modu upisuje samo ime modela
-						 setLinkForOppositeMode("/rdfGraphName/" + rdfGraphName.split(".rdf")[0]);
-					}
-					else
-					{
-						// ukoliko postoji i fajl sa tekstom onda...
-						
-						 var str1 = textFileName; 
-						 var n = str1.search(".txt");
-	
-						 var textFileNameWithoutExtension = textFileName;
-						 
-						 if(n!=-1)
-						 {
-							// jeste txt fajl
-							 textFileNameWithoutExtension = textFileName.split(".txt")[0];
-							 textFileType = "txt";
-						 }
-						 else
-						 {
-							 // jeste html fajl
-							 textFileNameWithoutExtension = textFileName.split(".html")[0];
-							 textFileType = "html";
-						 }
-	
-						// koji je tip fajla txt ili html
-						var strLink = "textFileType/" + textFileType + "/";
-	
-						 // kreiranje linka za read mod
-						 setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink +"rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
-					}
-		
-		    	
+
+			 		addFileNamesToLink();
 					
 				});
 		
 		}
 	}
-
+	
+	function setRdfGraphName()
+	{
+		if(rdfGraphName=="")
+ 		{
+			// trazi se .txt u nazivu
+			var n = textFileName.search(".txt");
+			
+			if(n!=-1)
+			{
+				// jeste txt fajl
+				textFileNameWithoutExtension = textFileName.split(".txt")[0];
+			}
+			else
+			{
+				// jeste html fajl
+				textFileNameWithoutExtension = textFileName.split(".html")[0];
+			}
+			
+			rdfGraphName = textFileNameWithoutExtension + ".rdf";
+ 		}
+	}
+	
 	// Ajax fja za citanje teksta iz fajla na serveru
 	function getTextFromServer(tFileName)
 	{
@@ -475,7 +428,7 @@
 		
 			}).done(function( response ) {
 
-				document.getElementById("mainDiv").innerHTML=response;
+				$("#mainDiv").html(response);
 				 
 				span();
 				

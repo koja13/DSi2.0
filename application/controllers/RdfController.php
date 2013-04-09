@@ -14,7 +14,7 @@ class RdfController extends CI_Controller {
 
 	function index()
 	{	
-		
+		$this->load->library("simple_html_dom");
 	}
 
 	function putBottomLines($str)
@@ -36,7 +36,7 @@ class RdfController extends CI_Controller {
 
 		$pre =  $this->putBottomLines($pre);
 
-		$rdfGraphName =/*"modeli/" .*/ $_POST['rdfGraph'];
+		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 		$object = new Literal ($obj);
@@ -61,6 +61,7 @@ class RdfController extends CI_Controller {
 		$rdfGraph->saveAs($rdfGraphName, "rdf");
 
 		$rdfGraph->close();
+		//echo "Ime rdf grafa = " . $rdfGraphName . ".";
 		
 	}
 
@@ -69,7 +70,7 @@ class RdfController extends CI_Controller {
 		$sub = $_POST['s'];
 		$obj = $_POST['o'];
 
-		$rdfGraphName =/*"modeli/" .*/ $_POST['rdfGraph'];
+		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 		$object = new Literal ($obj);
@@ -118,7 +119,7 @@ class RdfController extends CI_Controller {
 	{
 		$sub = $_POST['s'];
 
-		$rdfGraphName =/*"modeli/" .*/ $_POST['rdfGraph'];
+		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 
@@ -166,7 +167,7 @@ class RdfController extends CI_Controller {
 	function uploadRdfGraph()
 	{
 		//$uploaddir = './modeli/';
-		$uploaddir = '';
+		$uploaddir = './rdfGraphs/';
 		$uploadfile = $uploaddir . basename($_FILES['filesRdf']['name']);
 		echo basename($_FILES['filesRdf']['name']);
 
@@ -203,7 +204,7 @@ class RdfController extends CI_Controller {
 	
 		$subjectsObjects = "";
 	
-		$rdfGraphName =/*"./modeli/" . */$iModela;
+		$rdfGraphName ="./rdfGraphs/". $iModela;
 	
 		$rdfGraph = ModelFactory::getDefaultModel();
 	
@@ -253,7 +254,7 @@ class RdfController extends CI_Controller {
 	function getSubjectsObjects()
 	{
 	
-		$rdfGraphName = $_POST['rdfGraph'];
+		$rdfGraphName = "./rdfGraphs/". $_POST['rdfGraph'];
 	
 		if (file_exists(base_url('/' . $rdfGraphName)))
 		{
