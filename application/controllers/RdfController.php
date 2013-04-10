@@ -36,7 +36,7 @@ class RdfController extends CI_Controller {
 
 		$pre =  $this->putBottomLines($pre);
 
-		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
+		$rdfGraphName = $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 		$object = new Literal ($obj);
@@ -57,11 +57,9 @@ class RdfController extends CI_Controller {
 
 		$rdfGraph->addWithoutDuplicates($statement);
 
-
 		$rdfGraph->saveAs($rdfGraphName, "rdf");
 
 		$rdfGraph->close();
-		//echo "Ime rdf grafa = " . $rdfGraphName . ".";
 		
 	}
 
@@ -70,7 +68,7 @@ class RdfController extends CI_Controller {
 		$sub = $_POST['s'];
 		$obj = $_POST['o'];
 
-		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
+		$rdfGraphName = $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 		$object = new Literal ($obj);
@@ -110,7 +108,6 @@ class RdfController extends CI_Controller {
 				
 		}
 
-		//$m->close();
 		$rdfGraph->close();
 
 	}
@@ -119,7 +116,7 @@ class RdfController extends CI_Controller {
 	{
 		$sub = $_POST['s'];
 
-		$rdfGraphName ="./rdfGraphs/". $_POST['rdfGraph'];
+		$rdfGraphName = $_POST['rdfGraph'];
 
 		$subject = new Resource ($sub);
 
@@ -158,23 +155,20 @@ class RdfController extends CI_Controller {
 			}
 				
 		}
-
-		//$m->close();
+		
 		$rdfGraph->close();
 
 	}
 
 	function uploadRdfGraph()
 	{
-		//$uploaddir = './modeli/';
-		$uploaddir = './rdfGraphs/';
+		$uploaddir = '';
 		$uploadfile = $uploaddir . basename($_FILES['filesRdf']['name']);
 		echo basename($_FILES['filesRdf']['name']);
 
 		if (move_uploaded_file($_FILES['filesRdf']['tmp_name'], $uploadfile))
 		{
 			echo "success";
-			 
 		}
 		else
 		{
@@ -199,12 +193,12 @@ class RdfController extends CI_Controller {
 		}
 	}
 
-	function getStringArraySO($iModela)
+	function getStringArraySO($rdfGraphN)
 	{
 	
 		$subjectsObjects = "";
 	
-		$rdfGraphName ="./rdfGraphs/". $iModela;
+		$rdfGraphName = $rdfGraphN;
 	
 		$rdfGraph = ModelFactory::getDefaultModel();
 	
@@ -217,9 +211,7 @@ class RdfController extends CI_Controller {
 			$rdfGraph->load($rdfGraphName);
 		}
 	
-	
 		$m = $rdfGraph->find(NULL, NULL, NULL);
-	
 	
 		if($m->size() == 0)
 		{
@@ -236,11 +228,8 @@ class RdfController extends CI_Controller {
 	
 				$subjectsObjects .= $statement->getLabelObject() . " ";
 			}
-	
-	
 		}
-	
-		//$m->close();
+		
 		$rdfGraph->close();
 	
 		$arraySO = explode(' ', $subjectsObjects);
@@ -253,28 +242,29 @@ class RdfController extends CI_Controller {
 	
 	function getSubjectsObjects()
 	{
-	
-		$rdfGraphName = "./rdfGraphs/". $_POST['rdfGraph'];
-	
-		if (file_exists(base_url('/' . $rdfGraphName)))
+		$rdfGraphName = $_POST['rdfGraph'];
+
+		$exists = file_exists($rdfGraphName);
+		
+		if ($exists == true)
 		{
-			echo $rdfGraphName;
-			echo $str;
+			$arraySO= $this->getStringArraySO($rdfGraphName);	
+			
+			$subjectsObjects = "";
+				
+			foreach ($arraySO as $SubObj)
+			{
+				$subjectsObjects.=$SubObj."|";
+			}
+				
+			$subjectsObjects = substr($subjectsObjects, 0, -2);
+
+			echo $subjectsObjects;
 	
 		}
 		else
 		{
-			$arraySO= $this->getStringArraySO($rdfGraphName);
-				
-			$str = "";
-				
-			foreach ($arraySO as $SubObj)
-			{
-				$str.=$SubObj."|";
-			}
-				
-			$str = substr($str, 0, -2);
-			echo $str;
+			echo "";
 		}
 	}
 	
@@ -284,17 +274,19 @@ class RdfController extends CI_Controller {
 		$textFileName = $_POST['textFile'];
 		$imeModela = $_POST['rdfGraph'];
 
-		$this->load->model('ReadModel');
-		$str = $this->ReadModel->readText($textFileName);
+		$textFromFile = $this->readText($textFileName);
 
-		echo $str;
+		echo $textFromFile;
 	}
+	
+	function readText($par)
+	{
+		$this->load->helper('file');
+		$textFromFile = read_file("./textFiles/" . $par);
+		return $textFromFile;
+	}
+	
 
-	function writeText($tekst, $imeFajla)
-	{	
-		$this->load->model('ReadModel');
-		$this->ReadModel->writeText($tekst,$imeFajla);
-	}
 }
 
 ?>

@@ -47,7 +47,7 @@
 		function setDownloadLinkForRdfGraph()
 		{
 			// kreiranje linka
-			window.location.href = config.base_url + "rdfGraphs/" + rdfGraphName;
+			$(location).attr('href', config.base_url + rdfGraphName);
 			 
 			// skrivanje obavestenja o downloadu, bice prikazano tek nakon izmene
 			$("#downloadMessageSpanId").hide();
@@ -64,18 +64,8 @@
 		{
 			document.getElementById('formRdfUploadId').target = 'iFrameRdf'; //'iFrameRdf' is the name of the iframe
 			document.getElementById('formRdfUploadId').submit();
-
 			
-			 // dobijanje imena modela nakon klika na dugme upload
-			 rdfGraphName = $('#fileRdfId').val();
-			 var n = rdfGraphName.split("\\"); 
-			 rdfGraphName = n[2];
-
-			// dobijanje imena modela za firefox, koristeci javascript biblioteku
-			if(BrowserDetect.browser=="Firefox")
-			{
-				rdfGraphName = document.getElementById('fileRdfId').value;
-			}
+			rdfGraphName = $('#fileRdfId').val().split('\\').pop();
 
 			addFileNamesToLink();
 			 
@@ -94,21 +84,12 @@
 			document.getElementById('formTextUploadId').target = 'iFrameText'; //'iFrameText' is the name of the iframe
 			document.getElementById('formTextUploadId').submit();
 
-			// poziv ajax funkcije da ucita tekst iz uploadovanog fajla
-			textFileName = $('#filesTextId').val();
-			var n = textFileName .split("\\"); 
-			textFileName  = n[2];
+			textFileName = $('#filesTextId').val().split('\\').pop();
 
-			// dobijanje imena fajla sa tekstom za firefox, koristeci javascript biblioteku
-			if(BrowserDetect.browser=="Firefox")
-			{
-				textFileName = document.getElementById('filesTextId').value;
-			}
-			
 			addFileNamesToLink();
 			
 			// pozivanje funkcije koja ucitava tekst iz fajla na serveru
-			loadTextFile(textFileName);
+			getTextFromServer(textFileName);
 		}
 		
 		
@@ -125,17 +106,14 @@
 			 else
 			 {
 				// ukoliko tekstualni fajl postoji
-				 
-				// uzima se ime fajla iz globalne promenljive
-				var str1 = textFileName; 
 
 				// trazi se .txt u nazivu
-				var n = str1.search(".txt");
+				var isTxtFile = textFileName.search(".txt");
 
 				// u lokalnoj promenljivoj se cuva naziv fajla sa tekstom
-				var textFileNameWithoutExtension = textFileName;
+				var textFileNameWithoutExtension = "";
 				 
-				if(n!=-1)
+				if(isTxtFile!=-1)
 				{
 					// jeste txt fajl
 					textFileNameWithoutExtension = textFileName.split(".txt")[0];
@@ -148,39 +126,19 @@
 					textFileType = "html";
 				}
 
-					// koji je tip fajla txt ili html
-				var strLink = "textFileType/" + textFileType + "/";//////////////////// PROVERI zbog kose crte
-			
 				if(rdfGraphName=="")
 				{
 					// ukoliko ne postoji model onda se link kreira tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, respektivno
-					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink);
+					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/textFileType/" + textFileType + "/");
 				}
 				else
 				{
 					// kreiranje linka za read mod tako da se salje ime fajla sa tekstom, tip fajla sa tekstom, naziv modela, respektivno
-					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/" + strLink + "/"+"rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
+					setLinkForOppositeMode("/textFileName/" + textFileNameWithoutExtension + "/textFileType/" + textFileType + "/rdfGraphName/" + rdfGraphName.split(".rdf")[0]); 
 				}
 
 			}
 		}
-		
-
-		
-		
-
-	// funkcija koja ucitava tekst iz fajla sa servera na osnovu prosledjenog imena fajla
-	function loadTextFile(fileName)
-	{
-					textFileName = fileName;
-					
-					// poziv ajax funkcije koja procita tekst sa servera na osnovu imena fajla koji joj se prosledi
-	                getTextFromServer(fileName);
-
-	             	// pozivanje funkcije koja recima daje drag & drop funkcionalnost
-	              //  drag_drop_fja();
-	}
-
 
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -399,9 +357,9 @@
 		if(rdfGraphName=="")
  		{
 			// trazi se .txt u nazivu
-			var n = textFileName.search(".txt");
+			var isTxtFile = textFileName.search(".txt");
 			
-			if(n!=-1)
+			if(isTxtFile!=-1)
 			{
 				// jeste txt fajl
 				textFileNameWithoutExtension = textFileName.split(".txt")[0];

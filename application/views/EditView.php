@@ -117,141 +117,31 @@
 <?php 
 
 	// pri promeni iz Read moda u Edit mod, ovo se radi pri ucitavanju EditView pogleda
-	
+		
 			if(isset ($rdfGraphName))
 			{
 				// ucita se ime modela u globalnu promenljivu
-				print ("<script> rdfGraphName =\"". $rdfGraphName . ".rdf\"; </script>");
-				
-				if(isset ($textFileName))
-				{
-					// kreiranje linka ka read modu
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/ReadController/index') . "\";</script>");
-					
-					// upisivanje imena fajla sa tekstom u globalnu promenljivu, i ucitavanje tog teksta iz fajla na serveru
-					print ("<script> textFileName =\"". $textFileName . "." . $textFileType . "\"; </script>");
-
-					// deo sa kreiranjem linka ka read modu
-					print("<script> var str1 = textFileName;
-					
-					var n = str1.search(\".txt\");
-					
-					var textFileNameWithoutExtension = textFileName; ");
-					
-					print("
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
-					
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType + \"/\";");
-						
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink +\"rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]); </script>");
-
-				}
-				else
-				{
-					// ukoliko postoji samo ucitan model a ne i fajl sa tekstom
-					
-					// kreiranje linka ka read modu
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/ReadController/index') . "\";</script>");
-					
-					// dodavanje imena modela u link ka read modu
-					print("<script> setLinkForOppositeMode(\"/rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]);</script>");	
-
-				}
+				// pa se dodaju nazivi fajlova u link ka opposite modu
+				print ("<script>
+							rdfGraphName =\"". $rdfGraphName . ".rdf\";
+						</script>");
 			}
-			
+
 			if(isset ($textFileName))
 			{
 				// ukoliko postoji fajl sa tekstom ucitan na serveru
 				
 				// upisivanje imena fajla sa tekstom u globalnu promenljivu, i ucitavanje tog teksta iz fajla na serveru
-				print ("<script> textFileName =\"". $textFileName . "." . $textFileType . "\"; loadTextFile(\"". $textFileName . "." . $textFileType . "\"); </script>");
-				
-				if(isset ($rdfGraphName))
-				{
-					// ukoliko postoje ucitani i fajl sa tekstom i rdf model
-					
-					// kreiranje linka ka read modu
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/ReadController/index') . "\";</script>");
-					
-					// deo sa kreiranjem linka ka read modu
-					print("<script> var str1 = textFileName;
-
-					var n = str1.search(\".txt\");
-
-					var textFileNameWithoutExtension = textFileName; ");
-						
-					print(" 
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
-
-	
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType + \"/\";");
-					
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink + \"rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]);</script>");	
-
-				}
-				else
-				{
-					// ukoliko je ucitan samo fajl sa tekstom a nije ucitan rdf model
-					
-					// kreiranje linka ka read modu
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/ReadController/index') . "\";</script>");
-						
-					// deo sa kreiranje linka ka read modu
-					print("<script> var str1 = textFileName;
-					
-					var n = str1.search(\".txt\");
-					
-					var textFileNameWithoutExtension = textFileName; ");
-					
-					print("
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
-					
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType;");
-		
-
-					// dodavanje imena fajla i tipa fajla u link ka read modu
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink);</script>");
-
-				}
+				print ("<script>
+							textFileName =\"". $textFileName . "." . $textFileType . "\";
+							getTextFromServer(\"". $textFileName . "." . $textFileType . "\");
+						</script>");
 			}
-
-	?>
+			
+			print ("<script>
+						addFileNamesToLink();
+					</script>");
+?>
 
 </body>
 </html>

@@ -100,122 +100,30 @@
 <div id='bottomDiv'></div>
 
 	
-	<?php 
+<?php 
 
-		// pri promeni iz Edit u Read mod, ovo se radi pri ucitavanju Read pogleda
-	
-			if(isset ($rdfGraphName))
-			{
-				print ("<script> rdfGraphName =\"". $rdfGraphName . ".rdf\"; $(\"#downloadSpanId\").show(); </script>");
-				
-				if(isset ($textFileName))
-				{
-					
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/EditController/index') . "\";</script>");
-					
-					
-					print ("<script> textFileName =\"". $textFileName . "." . $textFileType . "\"; </script>");
-					
-					print("<script> var str1 = textFileName;
-			
-					var n = str1.search(\".txt\");
-			
-					var textFileNameWithoutExtension = textFileName; ");
-						
-					print("
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
-						
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType + \"/\";");
-					
+	// pri promeni iz Edit u Read mod, ovo se radi pri ucitavanju Read pogleda
 
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink +\"rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]); </script>");
-				}
-				else
-				{
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/EditController/index') . "\";</script>");
-					print("<script> setLinkForOppositeMode(\"/rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]);</script>");	
-				}
-			}
-			
-			if(isset ($textFileName))
-			{
-				print ("<script> textFileName =\"". $textFileName . "." . $textFileType . "\"; loadTextFile(\"". $textFileName . "." . $textFileType . "\"); </script>");
-				
-				
-				if(isset ($rdfGraphName))
-				{
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/EditController/index') . "\";</script>");
-					
-					print("<script> var str1 = textFileName;
-					
-					var n = str1.search(\".txt\");
-					
-					var textFileNameWithoutExtension = textFileName; ");
-					
-					print("
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
+		if(isset ($rdfGraphName))
+		{
+			print ("<script>
+						rdfGraphName =\"". $rdfGraphName . ".rdf\";
+					 	$(\"#downloadSpanId\").show();
+					</script>");
+		}
 
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType + \"/\";");
-					
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink + \"rdfGraphName/\" + rdfGraphName.split(\".rdf\")[0]);</script>");
-
-				}
-				else
-				{
-					print("<script> document.getElementById('linkID').href = \"" . site_url('/EditController/index') . "\";</script>");
-					
-					print("<script> var str1 = textFileName;
-			
-					var n = str1.search(\".txt\");
-			
-					var textFileNameWithoutExtension = textFileName; ");
-						
-					print("
-					if(n!=-1)
-					{
-						// jeste txt fajl
-						textFileNameWithoutExtension = textFileName.split(\".txt\")[0];
-						textFileType = \"txt\";
-					}
-					else
-					{
-						// jeste html fajl
-						textFileNameWithoutExtension = textFileName.split(\".html\")[0];
-						textFileType = \"html\";
-					}");
-						
-					// koji je tip fajla txt ili html
-					print("var strLink = \"textFileType/\" + textFileType;");
-
-					print("setLinkForOppositeMode(\"/textFileName/\" + textFileNameWithoutExtension + \"/\" + strLink);</script>");
-				}
-			}
-
-	?>
+		if(isset ($textFileName))
+		{
+			print ("<script>
+						textFileName =\"". $textFileName . "." . $textFileType . "\";
+						getTextFromServer(\"". $textFileName . "." . $textFileType . "\");
+					</script>");
+		}
+		
+		print ("<script>
+					addFileNamesToLink();
+				</script>");		
+?>
 		
 </body>
 </html>
