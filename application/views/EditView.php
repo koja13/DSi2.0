@@ -44,8 +44,7 @@
 <div id='topDiv'>
 
 	<div id='topDivLeft'>
-	
-			
+
 			<!-- FORMA ZA UPLOAD TXT FAJLA, ovo je za sve ostale pretrazivace osim Chroma, ukoliko se ustanovi da je Chrome pretrazivac u kome je pokrenuta app onda se ova forma ne prikazuje -->
 			
 			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/RdfController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
@@ -54,8 +53,8 @@
 			Dodajte tekst: 
 			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
 			<input name="filesText" id="filesTextId" size="27" type="file" />
-			<input type="button" name="action" value="Upload" onclick='uploadTextFile();'/> 
-			<iframe id='iFrameTextId' name='iFrameText' src="" style="display:none;" >
+			<input id="textUploadId" type="button" name="action" value="Upload"/> 
+			<iframe id='iFrameTextId' name='iFrameText' src="" >
 			</iframe>
 			</div>
 			
@@ -70,7 +69,7 @@
 			Dodajte rdf model:
 			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
 			<input name="filesRdf" id="fileRdfId" size="27" type="file" />
-			<input type="button" name="action" value="Upload" onclick='uploadRdfGraph();'/> 
+			<input id="rdfUploadId" type="button" name="action" value="Upload"/> 
 			<iframe id='iFrameRdfId' name='iFrameRdf' src="" style="display:none;" >
 			</iframe>
 			</div>

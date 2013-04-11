@@ -30,7 +30,7 @@
 
 		
 		/////////////////////////    DEO SA POSTAVLJANJEM LINKA ZA OPPOSITE MOD     ////////////////////////////
-
+		
 		
 		// funkcija koja postavlja link ka Read modu, tj na vec napravljeni link dodaje string koji se prosledi
 		function setLinkForOppositeMode(str)  
@@ -88,10 +88,30 @@
 
 			addFileNamesToLink();
 			
+			//alert($('#iFrameTextId').contents().find('body').html());
 			// pozivanje funkcije koja ucitava tekst iz fajla na serveru
-			getTextFromServer(textFileName);
+			
+			
+				setTimeout(function()
+					{
+						getTextFromServer(textFileName);
+					} , 500);
+			
+			
+			//getTextFromServer(textFileName);
 		}
 		
+		$(document).ready(function() {
+		    $("#textUploadId").click(function() {
+		    	uploadTextFile();
+		    });
+		});
+
+		$(document).ready(function() {
+		    $("#rdfUploadId").click(function() {
+		    	uploadRdfGraph();
+		    });
+		});
 		
 		function addFileNamesToLink()
 		{ 
