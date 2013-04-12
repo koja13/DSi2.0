@@ -1,7 +1,5 @@
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////    PROMENLJIVE    /////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+		// GLOBALNE  PROMENLJIVE
+
 		// promenljive subjekat, objekat i predikat
 		var subject;
 		var object;
@@ -22,28 +20,31 @@
 		// promenljiva koja cuva link ka rdf kontroleru, koristi se kod ajax poziva
 		var rdfController = config.site_url + "/RdfController";
 		
-		
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////    FUNKCIJE    ////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		// FUNKCIJE
 		
-		/////////////////////////    DEO SA POSTAVLJANJEM LINKA ZA OPPOSITE MOD     ////////////////////////////
 		
-		
-		// funkcija koja postavlja link ka Read modu, tj na vec napravljeni link dodaje string koji se prosledi
+		// ========================= setLinkForOppositeMode(str) ========================
+		//
+		// funkcija koja postavlja link ka Edit/Read modu, tj na vec napravljeni link dodaje string koji se prosledi
+		// poziva se prilikom ucitavanja js fajla
+		// poziva je funkcija addFileNamesToLink(), prilikom dodavanja naziva fajlova u link ka opposite modu
+		// ulazni parametar je: str - string koji se dodaje na link
+		//
 		function setLinkForOppositeMode(str)  
 		{
-			//postavljanje osnovne putanje za link EDIT MODE, posle se samo dodaju imeTXT fajla, rdfGraphName
+			//postavljanje osnovne putanje za link ka Edit/Read modu, i dodavanje prosledjenog stringa tom linku
 			$("#linkID").attr("href", config.site_url + "/" + config.opposite_controller + "/index" + str);
 		}
-
-		// poziv funkcije sa praznim stringom
+		// poziv funkcije sa praznim stringom, zbog kreiranja linka prilikom ucitavanja strane
 		setLinkForOppositeMode("");
 	
-		
+	
+		// ========================= setDownloadLinkForRdfGraph() ========================
+		//
 		// funkcija koja postavlja link ka rdf kako bi mogao da bude downloadovan klikom na dugme
+		// aktivira je onClick event button-a za download
+		// 
 		function setDownloadLinkForRdfGraph()
 		{
 			// kreiranje linka
@@ -55,20 +56,29 @@
 
 	
 		
-		////////////////////////////////////////////////////////////////////////////////////////////////////
-		///////////////////////////////     FUNKCIJE ZA UPLOAD FAJLOVA   ///////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		// FUNKCIJE ZA UPLOAD FAJLOVA
+		//
 		
+		// ========================= uploadRdfGraph() ========================
+		//
 		// funkcija za upload RDF fajla
+		// poziva se aktiviranjem onclick eventa input file polja za upload rdf fajla
+		//
 		function uploadRdfGraph()
 		{
-			document.getElementById('formRdfUploadId').target = 'iFrameRdf'; //'iFrameRdf' is the name of the iframe
-			document.getElementById('formRdfUploadId').submit();
+			// koriscenje iframe za uplaod fajla, kako ne bi doslo do refreshovanja stranice
+			$("#formRdfUploadId").target = 'iFrameRdf'; //'iFrameRdf' is the name of the iframe
+			$("#formRdfUploadId").submit();
 			
+			// ucitavanje naziva rdf fajla u globalnu promenljivu
 			rdfGraphName = $('#fileRdfId').val().split('\\').pop();
 
+			// dodavanje naziva fajlova u link ka opposite modu
 			addFileNamesToLink();
-			 
+			
+			// ukoliko je u pitanju ReadController onda se vrsi spanovanje nakon upload-a
+			// rdf fajla, pa se nakon toga prikazuje dugme za download
 			 if(config.controller=="ReadController")
 			 {
 				span();
@@ -77,42 +87,55 @@
 			 }
 		}
 		
-		
-		// funkcija za upload txt fajla
+		// ========================= uploadTextFile() ========================
+		//
+		// funkcija za upload fajla sa tekstom
+		// poziva se aktiviranjem onclick eventa input file polja za upload fajla za tekstom
+		//
 		function uploadTextFile()
 		{ 
-			document.getElementById('formTextUploadId').target = 'iFrameText'; //'iFrameText' is the name of the iframe
-			document.getElementById('formTextUploadId').submit();
+			// koriscenje iframe za uplaod fajla, kako ne bi doslo do refreshovanja stranice
+			$("#formTextUploadId").target = 'iFrameText'; //'iFrameText' is the name of the iframe
+			$("#formTextUploadId").submit();
 
+			// ucitavanje naziva fajla sa tekstom u globalnu promenljivu
 			textFileName = $('#filesTextId').val().split('\\').pop();
 
+			// dodavanje naziva fajlova u link ka opposite modu
 			addFileNamesToLink();
 			
 			//alert($('#iFrameTextId').contents().find('body').html());
+			
 			// pozivanje funkcije koja ucitava tekst iz fajla na serveru
+			setTimeout(function()
+			{
+				getTextFromServer(textFileName);
+			}, 1000);
 			
-			
-				setTimeout(function()
-					{
-						getTextFromServer(textFileName);
-					} , 500);
-			
-			
-			//getTextFromServer(textFileName);
 		}
-		
+
+		// postavljanje handler-a za onClick event input polja za upload text fajla
 		$(document).ready(function() {
 		    $("#textUploadId").click(function() {
 		    	uploadTextFile();
 		    });
 		});
 
+		// postavljanje handler-a za onClick event input polja za upload rdf fajla
 		$(document).ready(function() {
 		    $("#rdfUploadId").click(function() {
 		    	uploadRdfGraph();
 		    });
 		});
 		
+		
+		// ========================= addFileNamesToLink() ========================
+		//
+		// funkcija koja dodaje nazive fajla sa tekstom, ekstenzije fajla sa tekstom i naziva rdf fajla na link za opposite mod
+		// pozivaju je funkcije uploadTextFile() i uploadTextFile() prilikom uploadovanja fajlova
+		// poziva se i nakon odgovora servera na ajax zahtev sendSubjectObjectPredicate(form)
+		// zbog kreiranja novog rdf fajla sa istim imenom kao fajl sa tekstom ukoliko rdf fajl prethodno nije ucitan a uneta je nova veza
+		//
 		function addFileNamesToLink()
 		{ 
 			if(textFileName=="")
@@ -160,12 +183,16 @@
 			}
 		}
 
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////     FUNKCIJA ZA DRAG & DROP      ///////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	//
+	// FUNKCIJA ZA DRAG & DROP
+	//
+		
+	// ========================= makeDraggableDroppable() ========================
+	//
 	// funkcija koja recima daje drag & drop funkcionalnost
+	// pozivaju je funkcije spanEditMode() i spanReadMode(), nakon stavljanja reci u spanove daje im se drag&drop funkcionalnost
+	// ova funkcija takodje kreira event handlere za hover, za pocetak prevlacenja i za kraj prevlacenja reci
+	//
 	function makeDraggableDroppable()
 	{
 		  // podesavanje promene kursora kad stane iznad reci koja moze da se prenese
@@ -179,7 +206,7 @@
 			
 			});
 
-			 // drag-drop deo 
+		  // drag-drop deo 
 	      $(".dragdrop").draggable( 
 	              {
 	                  containment: '#content',
@@ -201,12 +228,12 @@
 	      function HandleDragStart( event, ui )
 	      {
 	    	  // potrebno je dobiti sve reci sa kojima je u vezi podignuta rec
-
+	    	  
 	    	  // rec koju smo podigli
 	    	  var s = $(this).html();
 
 	    	  subject = s;
-
+	    	  
 	    	  // slanje subjekta serveru ajax funkcijom
 	    	  sendSubject();
 		  }
@@ -220,9 +247,10 @@
 	      // handler za spustanje reci
 	  	  function handleDropEvent( event, ui )
 	  	  {
-		  	var s = ui.draggable.html();
-		  	var o = $(this).html();
-		//	alert("Subjekat = " + s + " i Objekat = " + o);
+		  	var s = ui.draggable.html(); // pokupi rec koja je stigla, to ce biti recenicni subjekat
+		  	var o = $(this).html(); // pokupi rec na koju je spusteno (to je this), to je recenicni objekat
+
+		  	// alert("Subjekat = " + s + " i Objekat = " + o);
 			
 			if(config.controller=="EditController")
 			{
@@ -231,25 +259,27 @@
 				
 				// ispisivanje postojecih veza
 				writeToBottomDivLeft(s,o);
-
-				// alert("Spustio sam " + s + " na " + o);
 			}
 			else if (config.controller=="ReadController")
 			{
 				// ispisivanje postojecih veza
 				writeToBottomDiv(s,o);
 			}
-			
-			
 	  	  }
 	}
 	
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////     FUNKCIJE ZA INTERAKCIJU SA SERVEROM     ////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// FUNKCIJE ZA INTERAKCIJU SA SERVEROM
+	//
 	
+	// ========================= writeToBottomDivRight(s,o) ========================
+	//
 	// funkcija koja dodaje formu za upis nove veze u donji desni div
+	// poziva je event handler za spustanje reci na rec handleDropEvent( event, ui )
+	// ulazni parametri su: s - subjekat, podignuta rec
+	//						o - objekat, rec na koju je podignuta rec spustena
+	// 
 	function writeToBottomDivRight(s,o)
 	{
 		subject=s;
@@ -261,7 +291,13 @@
 								 "</form>");
 	}
 
+	// ========================= writeToBottomDivLeft(s,o) ========================
+	//
 	// funkcija koja salje subjekat i objekat serveru, i rezultat od servera upise u donji div levo
+	// poziva je event handler za spustanje reci na rec handleDropEvent( event, ui )
+	// ulazni parametri su: s - subjekat, podignuta rec
+	//						o - objekat, rec na koju je podignuta rec spustena
+	// 
 	function writeToBottomDivLeft(s,o)
 	{
 		subject=s;
@@ -271,7 +307,13 @@
 		sendSubjectObject();
 	}
 
-	// SAMO ZA READ MODE
+	// ========================= writeToBottomDiv(s,o) ========================
+	//
+	// funkcija koja salje subjekat i objekat serveru, i rezultat od servera upise u donji div
+	// poziva je event handler za spustanje reci na rec handleDropEvent( event, ui ), ukoliko je u pitanju Read mode
+	// ulazni parametri su: s - subjekat, podignuta rec
+	//						o - objekat, rec na koju je podignuta rec spustena
+	// 
 	function writeToBottomDiv(s,o)
 	{
 		subject=s;
@@ -281,34 +323,49 @@
 		sendSubjectObject();
 	}
 
-	///////////////////////////////     AJAX FUNKCIJE     ///////////////////////////////////////////////
+	//
+	// AJAX FUNKCIJE
+	//
 	
-	// Ajax fja za slanje subjekta serveru, kako bi dobili sve objekte za koje je vezan!!!!!
+	// ========================= sendSubject() ========================
+	//
+	// Ajax fja za slanje subjekta serveru, kako bi dobili sve objekte za koje je vezan
+	// poziva je event handler za pocetak prenosenja reci handleDragStart( event, ui )
+	// 
 	function sendSubject()
 	{
 		$.ajax({
+			// post zahtev je u pitanju
 			  type: "POST",
+			  // link ka kome se upucuje zahtev, getObjects predstavlja metod na serveru koji ce da odgovori na zahtev
 			  url: rdfController + "/getObjects",
+			  // podaci koji se salju, nazivi subjekta, rdf grafa
 			  data: {	
 				  		s: subject,
 						rdfGraph: rdfGraphName
 			  		}
 			}).done(function( response ) {
 
+				// obrada odgovora na zahtev, postavljanje pozadinske boje svim objektima koje dobijemo kao odgovor
 			  $(response).css("background-color", "yellow");
 				
 			});
 	}
 
-// Ajax fja za slanje subjekta i objekta serveru, kako bi dobili postojece veze izmedju njih
 	
+	// ========================= sendSubjectObject() ========================
+	//
+	// Ajax fja za slanje subjekta i objekta serveru, kako bi dobili postojece veze izmedju njih
+	// pozivaju je funkcije writeToBottomDivLeft(s,o) i writeToBottomDiv(s,o)
+	// 
 	function sendSubjectObject()
 	{
 		
 		$.ajax({
 			  type: "POST",
 			  url: rdfController + "/getPredicate",
-			  data: { 	s: subject,
+			  data: {
+				  		s: subject,
 						o: object ,
 						rdfGraph: rdfGraphName
 			  		}
@@ -323,7 +380,7 @@
 				}
 				else if (config.controller=="ReadController")
 				{
-				
+					// u donji div se upisu sve veze koje vrati server
 					$("#bottomDiv").html(response);
 				}
 				
@@ -331,14 +388,21 @@
 	}
 	
 	
-	// Ajax fja za slanje subjekta, objekta i predikta serveru
-	
+	// ========================= sendSubjectObjectPredicate(form) ========================
+	//
+	// Ajax fja za slanje subjekta, objekta i predikta serveru, kako bi nova veza bila upisana u rdf graf
+	// poziva se na onClick event dugmeta "Sacuvaj" (za cuvanje nove veze)
+	// ulazni parametar je: form - referenca na formu za cuvanje nove veze
+	//
 	function sendSubjectObjectPredicate(form)
 	{
+		// uzimanje unesenog predikta u polju za unos nove veze
 		predicate = form.predicate.value;
 		
+		// postavljanje naziva rdf grafa ukoliko vec nije uploadovan na server
  		setRdfGraphName();
  		
+ 		// ukoliko nista nije uneseno u polje za novu vezu onda ne radi nista
 		if(predicate!="")
 		{
 			$.ajax({
@@ -351,7 +415,8 @@
 				  		}
 			
 				}).done(function( response ) {
-					// ovde se obradjuje odgovor na zahtev koji se salje Ajaxom!
+			
+					// ovde se obradjuje odgovor na zahtev koji se salje Ajaxom
 		    		 
 			  		$("#bottomDivRight").html($("#bottomDivRight").html() + response);
 	
@@ -365,13 +430,45 @@
 			 		// prikazuje se obavestenje da je moguce skinuti novu verziju modela
 			 		downloadMessage();
 
+			 		// dodavanje imena fajlova u link ka opposite modu
 			 		addFileNamesToLink();
 					
 				});
 		
 		}
 	}
+
+	// ========================= getTextFromServer(tFileName) ========================
+	//
+	// Ajax fja za citanje teksta iz fajla na serveru (i spanovanje tog teksta)
+	// poziva je funkcija uploadTextFile, takodje se poziva prilikom ucitavanja stranice ukoliko je tekst ucitan na server
+	// ulazni parametar je: tFileName - naziv fajla sa tekstom na serveru
+	//
+	function getTextFromServer(tFileName)
+	{
+		$.ajax({
+			  type: "POST",
+			  url: rdfController + "/getText",
+			  data: { 	textFile: tFileName,
+						rdfGraph: rdfGraphName
+			  		}
+		
+			}).done(function( response ) {
+
+				// upisivanje procitanog teksta u mainDiv
+				$("#mainDiv").html(response);
+				 
+				// spanovanje teksta
+				span();
+				
+			});
+	}
 	
+	// ========================= setRdfGraphName() ========================
+	//
+	// Funkcija za postavljanje naziva rdf grafa ukoliko neki graf nije vec ucitan
+	// poziva je funkcija sendSubjectObjectPredicate(form) pre nego sto se uputi zahtev serveru
+	//
 	function setRdfGraphName()
 	{
 		if(rdfGraphName=="")
@@ -394,26 +491,11 @@
  		}
 	}
 	
-	// Ajax fja za citanje teksta iz fajla na serveru
-	function getTextFromServer(tFileName)
-	{
-		$.ajax({
-			  type: "POST",
-			  url: rdfController + "/getText",
-			  data: { 	textFile: tFileName,
-						rdfGraph: rdfGraphName
-			  		}
-		
-			}).done(function( response ) {
-
-				$("#mainDiv").html(response);
-				 
-				span();
-				
-			});
-	}
-	
-	
+	// ========================= span() ========================
+	//
+	// Funkcija za spanovanje teksta, u zavisnosti od moda poziva odgovarajucu funkciju za spanovanje
+	// poziva je funkcija getTextFromServer(tFileName), i funkcija uploadRdfGraph() samo u slucaju da je u pitanju Read mode
+	//
 	function span()
 	{
 		if(config.controller=="EditController")
@@ -427,6 +509,14 @@
 		}
 	}
 	
+	// ========================= spanEditMode() ========================
+	//
+	// Funkcija za spanovanje teksta u Edit modu
+	// poziva je funkcija span()
+	// koristi funkciju findAndReplaceDOMText, definisanu u eksternoj js biblioteci
+	// funkcija findAndReplaceDOMText pronalazi reci u tekstu i stavlja ih u html span elemente kojima se daje klasa dragdrop, 
+	// \w+/g predsatvlja regular expresion kojim se biraju sve reci u tekstu, mainDiv predstavlja id diva koji u kome se traze reci
+	//
 	function spanEditMode()
 	{
 		findAndReplaceDOMText(
@@ -444,7 +534,15 @@
 		makeDraggableDroppable();
 	}
 	
-	// Ajax fja za citanje subjekata i objekata sa servera, a zatim spanovanje svih subjekata i objekata u tekstu
+	// ========================= spanReadMode() ========================
+	//
+	// Ajax funkcija za citanje subjekata i objekata sa servera, pa zatim spanovanje teksta u Read modu
+	// poziva je funkcija span()
+	// koristi funkciju findAndReplaceDOMText, definisanu u eksternoj js biblioteci
+	// funkcija findAndReplaceDOMText pronalazi reci u tekstu i stavlja ih u html span elemente kojima se daje klasa dragdrop, 
+	// regular expresion kojim se biraju reci u tekstu dobija se putem ajax zahteva serveru, ajax zahtevom traze se svi subjekti i objekti koje taj rdf fajl sadrzi
+	// mainDiv predstavlja id diva koji u kome se traze reci
+	//
 	function spanReadMode()
 	{
 			$.ajax({
@@ -469,14 +567,19 @@
 					return el;
 					}
 				);
-			  
+				
+				// recima u tekstu se daje drag & drop funkcionalnost
 				makeDraggableDroppable();
 				
 			});
 	}
-
 	
+	// ========================= downloadMessage() ========================
+	//
 	// funkcija koja prikazuje obavestenje o downloadu rdf modela kao i dugme za download
+	// poziva je funkcija sendSubjectObjectPredicate(form)
+	// nakon unosa nove veze korisniku se ispise obavestenje da je rdf graf izmenjen i dugme za download postanje vidljivo
+	//
 	function downloadMessage()
 	{
 		// ukoliko je rdf model izmenjen, tj dodate nove veze, prikazi obavestenje i dugme za download

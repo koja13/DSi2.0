@@ -3,6 +3,7 @@
 <head>
 <title>Edit mode</title>
 
+<!------------------------- main.css, ucitavanje stilova iz eksternog css fajla ------------------------->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('/assets/css/main.css');?>" />
 
 <style type="text/css">
@@ -21,31 +22,29 @@
      controller: "EditController",
      opposite_controller: "ReadController"
  };
- 
-//alert(config.controller);
+
 </script>
 
 </head>
 
 <body class="bodyClass">
 
-							<!-- jQuery biblioteke -->
+<!------------------------------------- jQuery biblioteke  ------------------------------------->
+
 <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery-1.7.2.js');?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/js/jquery-ui.min.js');?>"></script>
 
 
 <script type="text/javascript" src="<?php echo base_url('/assets/js/findAndReplaceDOMText.js');?>"></script>
-
 <script type="text/javascript" src="<?php echo base_url('/assets/js/jsFunctions.js');?>"></script>
 
-<script type="text/javascript" src="<?php echo base_url('/assets/js/browserdetect.js');?>"></script>
-
-
+<!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
 
+	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
 
-			<!-- FORMA ZA UPLOAD TXT FAJLA, ovo je za sve ostale pretrazivace osim Chroma, ukoliko se ustanovi da je Chrome pretrazivac u kome je pokrenuta app onda se ova forma ne prikazuje -->
+			<!------------------------- FORMA ZA UPLOAD TXT FAJLA ------------------------->
 			
 			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/RdfController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
 			
@@ -54,14 +53,13 @@
 			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
 			<input name="filesText" id="filesTextId" size="27" type="file" />
 			<input id="textUploadId" type="button" name="action" value="Upload"/> 
-			<iframe id='iFrameTextId' name='iFrameText' src="" >
+			<iframe id='iFrameTextId' name='iFrameText' src="" style="display:none;">
 			</iframe>
 			</div>
 			
 			</form>
 			
-			
-			<!-- FORMA ZA UPLOAD RDF FAJLA -->
+			<!------------------------- FORMA ZA UPLOAD RDF FAJLA ------------------------->
 			
 			<form id="formRdfUploadId" name="form" action="<?php echo site_url('/RdfController/uploadRdfGraph');?>" method="POST" enctype="multipart/form-data" >
 			
@@ -79,34 +77,35 @@
 	
 	</div>
 	
+	<!------------------------- topDivRight, gornji desni div u kome su link ka Read modu i dugme za download rdf grafa ------------------------->
 	<div id='topDivRight'>
 	
 			<!-- link ka Read Modu -->
 			<a id="linkID" href="<?php echo site_url('/ReadController/index');?>" > READ MODE </a>
-			
-			
-			
+		
 			<!-- Dugme za download rdf modela -->
-			<form>
-			
+			<form>	
 			<span id="downloadSpanId" style="display: none;">
 			<span id="downloadMessageSpanId" style="color:red; font-weight:bold;"> Nova verzija RDF-a ---->  </span>
 			<input id="downloadButtonId" type="button" value="Download RDF" onClick="setDownloadLinkForRdfGraph();">
 			</span>
-			
 			</form>
 	</div>
 
 </div>
 
+<!------------------------- mainDiv, centralni div u koji se ucitava tekst ------------------------->
 <div id='mainDiv'></div>
 
+<!------------------------- bottomDiv, donji div u kome su dva diva: donji levi div i donji desni div ------------------------->
 <div id='bottomDiv'>
 
+	<!------------------------- bottomDivLeft, donji levi div u kome se prikazuju veze izmedju reci u tekstu ------------------------->
 	<div id='bottomDivLeft'>
 	
 	</div>
 	
+	<!------------------------- bottomDivRight, donji desni div u kome se prikazuje forma za unos nove veze ------------------------->
 	<div id='bottomDivRight'>
 	
 	</div>
@@ -115,21 +114,21 @@
 
 <?php 
 
-	// pri promeni iz Read moda u Edit mod, ovo se radi pri ucitavanju EditView pogleda
-		
+			// ovo je bitno zbog prelaza iz Read moda u Edit mod
+			// ovo se radi pri ucitavanju EditView pogleda
+			
+			// ukoliko postoji rdf fajl ucitan na serveru
 			if(isset ($rdfGraphName))
 			{
 				// ucita se ime modela u globalnu promenljivu
-				// pa se dodaju nazivi fajlova u link ka opposite modu
 				print ("<script>
 							rdfGraphName =\"". $rdfGraphName . ".rdf\";
 						</script>");
 			}
-
+			
+			// ukoliko postoji fajl sa tekstom ucitan na serveru
 			if(isset ($textFileName))
 			{
-				// ukoliko postoji fajl sa tekstom ucitan na serveru
-				
 				// upisivanje imena fajla sa tekstom u globalnu promenljivu, i ucitavanje tog teksta iz fajla na serveru
 				print ("<script>
 							textFileName =\"". $textFileName . "." . $textFileType . "\";
@@ -137,6 +136,7 @@
 						</script>");
 			}
 			
+			// dodaju se nazivi fajlova u link ka Read modu
 			print ("<script>
 						addFileNamesToLink();
 					</script>");
