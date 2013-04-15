@@ -46,7 +46,7 @@
 			
 			<!------------------------- FORMA ZA UPLOAD TXT FAJLA ------------------------->
 			
-			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/ReadController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
+			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/RdfController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
 			
 			<div id="divTextUploadId">
 			Dodajte tekst: 
@@ -62,7 +62,7 @@
 			
 			<!------------------------- FORMA ZA UPLOAD RDF FAJLA ------------------------->
 						
-			<form id="formRdfUploadId" name="form" action="<?php echo site_url('/ReadController/uploadRdfGraph');?>" method="POST" enctype="multipart/form-data" >
+			<form id="formRdfUploadId" name="form" action="<?php echo site_url('/RdfController/uploadRdfGraph');?>" method="POST" enctype="multipart/form-data" >
 			
 			<div id="divRdfUploadId">
 			Dodajte rdf model:

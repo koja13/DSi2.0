@@ -68,8 +68,8 @@
 		function uploadRdfGraph()
 		{
 			// koriscenje iframe za uplaod fajla, kako ne bi doslo do refreshovanja stranice
-			$("#formRdfUploadId").target = 'iFrameRdf'; //'iFrameRdf' is the name of the iframe
-			$("#formRdfUploadId").submit();
+			document.getElementById('formRdfUploadId').target = 'iFrameRdf'; //'iFrameRdf' is the name of the iframe
+			document.getElementById('formRdfUploadId').submit();
 			
 			// ucitavanje naziva rdf fajla u globalnu promenljivu
 			rdfGraphName = $('#fileRdfId').val().split('\\').pop();
@@ -77,12 +77,9 @@
 			// dodavanje naziva fajlova u link ka opposite modu
 			addFileNamesToLink();
 			
-			// ukoliko je u pitanju ReadController onda se vrsi spanovanje nakon upload-a
-			// rdf fajla, pa se nakon toga prikazuje dugme za download
+			// prikazuje dugme za download ukoliko je
 			 if(config.controller=="ReadController")
 			 {
-				span();
-				
 				$("#downloadSpanId").show();
 			 }
 		}
@@ -95,23 +92,14 @@
 		function uploadTextFile()
 		{ 
 			// koriscenje iframe za uplaod fajla, kako ne bi doslo do refreshovanja stranice
-			$("#formTextUploadId").target = 'iFrameText'; //'iFrameText' is the name of the iframe
-			$("#formTextUploadId").submit();
+			 document.getElementById('formTextUploadId').target = 'iFrameText'; //'iFrameText' is the name of the iframe
+			 document.getElementById('formTextUploadId').submit();
 
 			// ucitavanje naziva fajla sa tekstom u globalnu promenljivu
 			textFileName = $('#filesTextId').val().split('\\').pop();
 
 			// dodavanje naziva fajlova u link ka opposite modu
 			addFileNamesToLink();
-			
-			//alert($('#iFrameTextId').contents().find('body').html());
-			
-			// pozivanje funkcije koja ucitava tekst iz fajla na serveru
-			setTimeout(function()
-			{
-				getTextFromServer(textFileName);
-			}, 1000);
-			
 		}
 
 		// postavljanje handler-a za onClick event input polja za upload text fajla
@@ -449,8 +437,8 @@
 		$.ajax({
 			  type: "POST",
 			  url: rdfController + "/getText",
-			  data: { 	textFile: tFileName,
-						rdfGraph: rdfGraphName
+			  data: { 	
+				  		textFile: tFileName
 			  		}
 		
 			}).done(function( response ) {
