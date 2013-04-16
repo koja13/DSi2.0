@@ -95,7 +95,16 @@
 </div>
 
 <!------------------------- mainDiv, centralni div u koji se ucitava tekst ------------------------->
-<div id='mainDiv'></div>
+<div id='mainDiv'>hahahahhah jsdfjsk jsnmfdin
+
+<iframe id='prev' name='iFrameRdf' src="http://en.wikipedia.org/wiki/Computer_science" width="100%" height="100%">
+
+</iframe>
+ <script>
+
+	span();
+</script>
+</div>
 
 <!------------------------- bottomDiv, donji div u kome su dva diva: donji levi div i donji desni div ------------------------->
 <div id='bottomDiv'>
