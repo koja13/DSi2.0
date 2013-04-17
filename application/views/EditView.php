@@ -115,8 +115,8 @@
         curl_close($ch);  
         echo $output;*/
         
-         $page = file_get_contents('http://en.wikipedia.org/wiki/Computer_science');
-         echo $page;
+        // $page = file_get_contents('http://en.wikipedia.org/wiki/Computer_science');
+         //echo $page;
 ?>
 <!--
 <iframe id='prev' name='iFrameRdf' src="http://en.wikipedia.org/wiki/Computer_science" width="100%" height="100%">
@@ -124,8 +124,8 @@
 </iframe>-->
  <script>
 
-	span();
-	makeDraggableDroppable();
+	//span();
+	//makeDraggableDroppable();
 </script>
 </div>
 
