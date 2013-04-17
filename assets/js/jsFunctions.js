@@ -193,7 +193,7 @@
 			$(this).css('cursor','auto');
 			
 			});
-
+		  
 		  // drag-drop deo 
 	      $(".dragdrop").draggable( 
 	              {
