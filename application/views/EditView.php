@@ -98,35 +98,38 @@
 <div id='mainDiv'>
 
 
-<?php 
-        // create curl resource 
-       /* $ch = curl_init(); 
-
-        // set url 
-        curl_setopt($ch, CURLOPT_URL, "http://en.wikipedia.org/wiki/Computer_science"); 
-
-        //return the transfer as a string 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-        // $output contains the output string 
-     	 $output = curl_exec($ch); 
-
-        // close curl resource to free up system resources 
-        curl_close($ch);  
-        echo $output;*/
+<?php   
+        $page = file_get_contents('http://en.wikipedia.org/wiki/Computer_science');
         
-        // $page = file_get_contents('http://en.wikipedia.org/wiki/Computer_science');
-        // echo $page;
+       // $pos1 = strpos($page, "<head>");
+       // $pos2 = strpos($page, "</head>");
+        
+        //$rest1 = substr($page, $pos1, $pos2);
+     //   echo $rest1;
+        
+        
+        
+        $pos1 = strpos($page, "<!-- content -->");
+        $pos2 = strpos($page, "<!-- /content -->");
+        
+        $rest = substr($page, $pos1, $pos2);
+        echo $rest;
+        
+      echo "<script>
+        
+        span();
+        makeDraggableDroppable();
+        
+        </script>";
 ?>
-<!--
-<iframe id='prev' name='iFrameRdf' src="http://en.wikipedia.org/wiki/Computer_science" width="100%" height="100%">
 
-</iframe>-->
  <script>
-
+ 
 	//span();
 	//makeDraggableDroppable();
+	
 </script>
+ 
 </div>
 
 <!------------------------- bottomDiv, donji div u kome su dva diva: donji levi div i donji desni div ------------------------->
