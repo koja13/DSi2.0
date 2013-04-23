@@ -25,12 +25,32 @@
 
 </script>
 <style>
+
+div#mainDiv
+{
+position:relative;
+}
+
 div#content
 {
-position:inherit;
-left:inherit;
-top:inherit;
+position:absolute;
+top:0;
+left:-145px;
+zoom: 125%;
 }
+
+#toogleSlideTopDiv{
+ position:absolute;
+ top:0;
+ right:0;
+}
+
+#toogleSlideTopDiv{
+ position:absolute;
+ top:0;
+ right:0;
+}
+
 </style>
 </head>
 
@@ -45,8 +65,17 @@ top:inherit;
 <script type="text/javascript" src="<?php echo base_url('/assets/js/findAndReplaceDOMText.js');?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/js/jsFunctions.js');?>"></script>
 
+<button id="toogleSlideTopDiv" name="toogleSlideTopDiv"> :) </button>
+
+
+
 <!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
+
+URL strane sa tekstom: 
+<input id="textURL" type="text" name="textURL" value="URL">
+<button id="textUrlButton" name="textUrlButton">Get text</button>
+<br>
 
 	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
@@ -102,107 +131,10 @@ top:inherit;
 </div>
 
 <!------------------------- mainDiv, centralni div u koji se ucitava tekst ------------------------->
+
 <div id='mainDiv'>
-
-<?php   
-        //$page = file_get_contents('http://en.wikipedia.org/wiki/Computer_science');
-        
-       // $pos1 = strpos($page, "<head>");
-       // $pos2 = strpos($page, "</head>");
-        
-        //$rest1 = substr($page, $pos1, $pos2);
-     //   echo $rest1;
-        $this->load->library("simple_html_dom");
-        
-        $html = file_get_html("http://en.wikipedia.org/wiki/Computer_science");
-
-     //echo  $html->getElementsByTagName("head")->innertext;
-        
-        
-        /*
-        
-        $dom = new DOMDocument;
-        $dom->loadHTML($html_content);
-        
-        function preg_replace_dom($regex, $replacement, DOMNode $dom, array $excludeParents = array()) {
-        	if (!empty($dom->childNodes)) {
-        		foreach ($dom->childNodes as $node) {
-        			if ($node instanceof DOMText &&
-        					!in_array($node->parentNode->nodeName, $excludeParents))
-        			{
-        				$node->nodeValue = preg_replace($regex, $replacement, $node->nodeValue);
-        			}
-        			else
-        			{
-        				preg_replace_dom($regex, $replacement, $node, $excludeParents);
-        			}
-        		}
-        	}
-        }
-        
-        preg_replace_dom('/match this text/i', 'IT WORKS', $dom->documentElement, array('div'));
-        
-        */
- 
-        foreach($html->find('link') as $element)
-        {
-        	echo $element->outertext . '<br>';
-        }
-        
-       foreach($html->find('style') as $element)
-       {
-        	echo $element->outertext . '<br>';
-       }
-        //echo $html->getElementById("content");
-        
-        echo $html->getElementById("content");
-      /*  $ht = $html->find('body',0);
-       $h =  $ht->find('div[content]');
-        echo $h-*/
-        
-      /*  foreach($ht->find('div[content]') as $element)
-        {
-        	echo $element->outertext . '<br>';
-        }*/
-        
-      //  echo $h;
-        
-        // Find all images
-     /*   foreach($html->find('img') as $element)
-        	echo $element->src . '<br>';
-        
-        // Find all links
-        foreach($html->find('a') as $element)
-        	echo $element->href . '<br>';*/
-        
-        
-        
-        
-        
-        
-       // $pos1 = strpos($page, "<!-- content -->");
-      //  $pos2 = strpos($page, "<!-- /content -->");
-        
-      //  $rest = substr($page, $pos1, $pos2);
-      //  echo $rest;
-        
-      echo "<script>
-        
-        span();
-        makeDraggableDroppable();
-        
-        </script>";
-?>
-
- <script>
- 
-	//span();
-	//makeDraggableDroppable();
-	
-</script>
  
 </div>
-
 <!------------------------- bottomDiv, donji div u kome su dva diva: donji levi div i donji desni div ------------------------->
 <div id='bottomDiv'>
 
@@ -217,6 +149,7 @@ top:inherit;
 	</div>
 
 </div>
+<button id="toogleSlideBottomDiv" name="toogleSlideBottomDiv"> :) </button>
 
 <?php 
 

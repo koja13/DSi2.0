@@ -410,6 +410,31 @@ class RdfController extends CI_Controller {
 		return $textFromFile;
 	}
 	
+	
+	
+	function getTextFromUrl()
+	{
+		$textUrl = $_POST['textUrl'];
+		
+		$this->load->library("simple_html_dom");
+		
+		$html = file_get_html($textUrl);
+		
+		foreach($html->find('link') as $element)
+		{
+			echo $element->outertext . '<br>';
+		}
+		
+		foreach($html->find('style') as $element)
+		{
+			echo $element->outertext . '<br>';
+		}
+		
+		echo $html->getElementById("content");
+		//echo $html->find('body', 0);
+		
+		$html->save("text.htm");;
+	}
 
 }
 

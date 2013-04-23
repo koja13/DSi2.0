@@ -20,7 +20,7 @@
 		// promenljiva koja cuva link ka rdf kontroleru, koristi se kod ajax poziva
 		var rdfController = config.site_url + "/RdfController";
 		
-
+		
 		// FUNKCIJE
 		
 		
@@ -582,3 +582,66 @@
 		}	
 	}
 	
+	
+	$(document).ready(function(){
+		  $("#toogleSlideTopDiv").click(function(){
+		  		$("#topDiv").slideToggle();
+		  		
+		  var height_pct = Math.round( 
+		    	$('#mainDiv').height() / 
+		    	$('#mainDiv').parent().height() * 100
+		   );
+		    
+		    if(height_pct != "85")
+		    {
+		    	$("#mainDiv").height("85%");
+		    }
+		    else
+		    {
+		    	$("#mainDiv").height("70%");
+		    }
+		  });
+		  
+		  $("#toogleSlideBottomDiv").click(function(){
+			    $("#bottomDiv").slideToggle();
+			    
+			    if(height_pct != "85")
+			    {
+			    	$("#mainDiv").height("85%");
+			    }
+			    else
+			    {
+			    	$("#mainDiv").height("70%");
+			    }
+			  });
+		 
+		});
+
+	
+	$(document).ready(function(){
+		  $("#textUrlButton").click(function(){
+			  sendUrlToServer($("#textURL").val());	  	
+		  });
+		 
+		});
+	
+	
+	function sendUrlToServer(textUrl)
+	{
+		$.ajax({
+			  type: "POST",
+			  url: rdfController + "/getTextFromUrl",
+			  data: { 	
+				  		textUrl: textUrl
+			  		}
+		
+			}).done(function( response ) {
+
+				// upisivanje procitanog teksta u mainDiv
+				$("#mainDiv").html(response);
+				 
+				// spanovanje teksta
+				span();
+				
+			});
+	}
