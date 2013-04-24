@@ -430,12 +430,57 @@ class RdfController extends CI_Controller {
 			echo $element->outertext . '<br>';
 		}
 		
-		echo $html->getElementById("content");
-		//echo $html->find('body', 0);
+		//echo $html->getElementById("content");
+		echo $html->find('body', 0);
 		
-		$html->save("text.htm");;
+		//$html->save("text.htm");;
 	}
+	
+	function getTitleFromUrl()
+	{
+		$textUrl = $_POST['textUrl'];
 
+		$str = file_get_contents($textUrl);
+		if(strlen($str)>0){
+			preg_match("/\<title\>(.*)\<\/title\>/",$str,$title);
+			echo $title[1];
+		}
+		
+	}
+	
+	function openOppositeMode()
+	{
+		$textFileName = $_POST['textFile'];
+		$textFileType = $_POST['textFileType'];
+		$rdfGraphName = $_POST['rdfGraph'];
+		
+		
+		if($textFileName!="")
+		{
+			$data['textFileName'] = $textFileName;
+		}
+		
+		if($textFileType!="")
+		{
+			$data['textFileType'] = $textFileType;
+		}
+		
+		if($rdfGraphName!="")
+		{
+			$data['rdfGraphName'] = $rdfGraphName;
+		}
+		
+		
+		if(isset ($data['textFileName']) || isset ($data['rdfGraphName']))
+		{
+			$this->load->view('EditView', $data);
+		}
+		else
+		{
+			$this->load->view('EditView', array('error' => ' ' ));
+		}
+	
+	}
 }
 
 ?>

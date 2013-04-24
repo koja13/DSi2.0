@@ -20,7 +20,7 @@
 		// promenljiva koja cuva link ka rdf kontroleru, koristi se kod ajax poziva
 		var rdfController = config.site_url + "/RdfController";
 		
-		
+		var titleFromHtml = "";
 		// FUNKCIJE
 		
 		
@@ -102,20 +102,48 @@
 			addFileNamesToLink();
 		}
 
-		// postavljanje handler-a za onClick event input polja za upload text fajla
-		$(document).ready(function() {
-		    $("#textUploadId").click(function() {
+		
+		$(document).ready(function() {    
+			// postavljanje handler-a za onClick event dugmeta za upload text fajla
+			$("#textUploadId").click(function() {
 		    	uploadTextFile();
 		    });
-		});
-
-		// postavljanje handler-a za onClick event input polja za upload rdf fajla
-		$(document).ready(function() {
+		    
+			// postavljanje handler-a za onClick event dugmeta za upload rdf fajla
 		    $("#rdfUploadId").click(function() {
 		    	uploadRdfGraph();
 		    });
+		    
+			// postavljanje handler-a za onClick event dugmeta za slanje url do html strane
+			$("#textUrlButton").click(function(){
+				  sendUrlToServer($("#textURL").val());
+				  getTitleFromUrl($("#textURL").val());
+			});
+			
+			
+			$("#linkNovi").click(function(){
+				  alert("Kliknuto na link");
+				  openOppositeMode();
+			});
 		});
-		
+
+		function openOppositeMode()
+		{
+			$.ajax({
+				// post zahtev je u pitanju
+				  type: "POST",
+				  // link ka kome se upucuje zahtev, getObjects predstavlja metod na serveru koji ce da odgovori na zahtev
+				  url: rdfController + "/openOppositeMode",
+				  // podaci koji se salju, nazivi subjekta, rdf grafa
+				  data: {	
+					  		textFile: textFileName,
+					  		textFileType: textFileType,
+					  		rdfGraph: rdfGraphName
+				  		}
+				}).done(function( response ) {
+					
+				});
+		}
 		
 		// ========================= addFileNamesToLink() ========================
 		//
@@ -452,6 +480,43 @@
 			});
 	}
 	
+	
+	
+	function sendUrlToServer(textUrl)
+	{
+		$.ajax({
+			  type: "POST",
+			  url: rdfController + "/getTextFromUrl",
+			  data: { 	
+				  		textUrl: textUrl
+			  		}
+		
+			}).done(function( response ) {
+
+				// upisivanje procitanog teksta u mainDiv
+				$("#mainDiv").html(response);
+				 
+				// spanovanje teksta
+				span();
+				
+			});
+	}
+	
+	function getTitleFromUrl(textUrl)
+	{
+		$.ajax({
+			  type: "POST",
+			  url: rdfController + "/getTitleFromUrl",
+			  data: { 	
+				  		textUrl: textUrl
+			  		}
+		
+			}).done(function( response ) {
+				
+				titleFromHtml = response;
+			});
+	}
+	
 	// ========================= setRdfGraphName() ========================
 	//
 	// Funkcija za postavljanje naziva rdf grafa ukoliko neki graf nije vec ucitan
@@ -616,32 +681,5 @@
 			  });
 		 
 		});
-
-	
-	$(document).ready(function(){
-		  $("#textUrlButton").click(function(){
-			  sendUrlToServer($("#textURL").val());	  	
-		  });
-		 
-		});
 	
 	
-	function sendUrlToServer(textUrl)
-	{
-		$.ajax({
-			  type: "POST",
-			  url: rdfController + "/getTextFromUrl",
-			  data: { 	
-				  		textUrl: textUrl
-			  		}
-		
-			}).done(function( response ) {
-
-				// upisivanje procitanog teksta u mainDiv
-				$("#mainDiv").html(response);
-				 
-				// spanovanje teksta
-				span();
-				
-			});
-	}

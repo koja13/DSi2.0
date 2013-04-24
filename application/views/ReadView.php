@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Read mode</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 
 <!------------------------- main.css, ucitavanje stilova iz eksternog css fajla ------------------------->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('/assets/css/main.css');?>" />
@@ -39,10 +40,14 @@
 
 <!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
-
+	<a id="linkNovi" href="" > Edit MODE novi link </a>
 	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
 
+			URL strane sa tekstom: 
+			<input id="textURL" type="text" name="textURL" value="URL">
+			<button id="textUrlButton" name="textUrlButton">Get text</button>
+			<br>
 			
 			<!------------------------- FORMA ZA UPLOAD TXT FAJLA ------------------------->
 			

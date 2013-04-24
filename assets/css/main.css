@@ -60,3 +60,18 @@
 	border-left: #BAB5B5 4px solid;
 	float:left;
 }
+
+
+
+div#mainDiv
+{
+position:relative;
+}
+
+div#content
+{
+position:absolute;
+top:0;
+left:-145px;
+zoom: 125%;
+}

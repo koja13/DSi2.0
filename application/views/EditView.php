@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Edit mode</title>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 
 <!------------------------- main.css, ucitavanje stilova iz eksternog css fajla ------------------------->
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('/assets/css/main.css');?>" />
@@ -25,19 +26,6 @@
 
 </script>
 <style>
-
-div#mainDiv
-{
-position:relative;
-}
-
-div#content
-{
-position:absolute;
-top:0;
-left:-145px;
-zoom: 125%;
-}
 
 #toogleSlideTopDiv{
  position:absolute;
@@ -72,14 +60,14 @@ zoom: 125%;
 <!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
 
-URL strane sa tekstom: 
-<input id="textURL" type="text" name="textURL" value="URL">
-<button id="textUrlButton" name="textUrlButton">Get text</button>
-<br>
-
 	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
-
+	
+			URL strane sa tekstom: 
+			<input id="textURL" type="text" name="textURL" value="URL">
+			<button id="textUrlButton" name="textUrlButton">Get text</button>
+			<br>
+			
 			<!------------------------- FORMA ZA UPLOAD TXT FAJLA ------------------------->
 			
 			<form id="formTextUploadId" name="formText" action="<?php echo site_url('/RdfController/uploadTextFile');?>" method="POST" enctype="multipart/form-data" >
@@ -112,6 +100,8 @@ URL strane sa tekstom:
 
 	
 	</div>
+	
+	<a id="linkNovi" href="" > READ MODE novi link </a>
 	
 	<!------------------------- topDivRight, gornji desni div u kome su link ka Read modu i dugme za download rdf grafa ------------------------->
 	<div id='topDivRight'>
