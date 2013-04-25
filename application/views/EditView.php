@@ -52,14 +52,18 @@
 
 <script type="text/javascript" src="<?php echo base_url('/assets/js/findAndReplaceDOMText.js');?>"></script>
 <script type="text/javascript" src="<?php echo base_url('/assets/js/jsFunctions.js');?>"></script>
-
+<!-- 
 <button id="toogleSlideTopDiv" name="toogleSlideTopDiv"> :) </button>
-
+--> 
 
 
 <!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
 
+<!-- 
+	<a id="linkNovi" href="" > READ MODE novi link </a>
+-->
+	
 	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
 	
@@ -100,9 +104,7 @@
 
 	
 	</div>
-	
-	<a id="linkNovi" href="" > READ MODE novi link </a>
-	
+
 	<!------------------------- topDivRight, gornji desni div u kome su link ka Read modu i dugme za download rdf grafa ------------------------->
 	<div id='topDivRight'>
 	
@@ -139,8 +141,10 @@
 	</div>
 
 </div>
-<button id="toogleSlideBottomDiv" name="toogleSlideBottomDiv"> :) </button>
 
+<!--  
+<button id="toogleSlideBottomDiv" name="toogleSlideBottomDiv"> :) </button>
+-->
 <?php 
 
 			// ovo je bitno zbog prelaza iz Read moda u Edit mod

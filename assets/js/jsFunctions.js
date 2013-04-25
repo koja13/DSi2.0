@@ -120,13 +120,13 @@
 				  getTitleFromUrl($("#textURL").val());
 			});
 			
-			
+			/*
 			$("#linkNovi").click(function(){
 				  alert("Kliknuto na link");
 				  openOppositeMode();
-			});
+			});*/
 		});
-
+/*
 		function openOppositeMode()
 		{
 			$.ajax({
@@ -141,9 +141,9 @@
 					  		rdfGraph: rdfGraphName
 				  		}
 				}).done(function( response ) {
-					
+					alert(response);
 				});
-		}
+		}*/
 		
 		// ========================= addFileNamesToLink() ========================
 		//
@@ -646,7 +646,7 @@
 			}			
 		}	
 	}
-	
+	/*
 	
 	$(document).ready(function(){
 		  $("#toogleSlideTopDiv").click(function(){
@@ -680,6 +680,6 @@
 			    }
 			  });
 		 
-		});
+		});*/
 	
 	

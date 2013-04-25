@@ -40,7 +40,11 @@
 
 <!------------------------- topDiv, gornji div u kome su dva diva: gornji levi div i gornji desni div ------------------------->
 <div id='topDiv'>
+
+<!-- 
 	<a id="linkNovi" href="" > Edit MODE novi link </a>
+-->
+
 	<!------------------------- topDivLeft, gornji levi div u kome su forme za upload Text i Rdf fajlova ------------------------->
 	<div id='topDivLeft'>
 

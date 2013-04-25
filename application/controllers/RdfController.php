@@ -469,7 +469,7 @@ class RdfController extends CI_Controller {
 		{
 			$data['rdfGraphName'] = $rdfGraphName;
 		}
-		
+		$this->load->view('EditView', $data);
 		
 		if(isset ($data['textFileName']) || isset ($data['rdfGraphName']))
 		{
@@ -479,7 +479,8 @@ class RdfController extends CI_Controller {
 		{
 			$this->load->view('EditView', array('error' => ' ' ));
 		}
-	
+		
+		//echo $textFileName . " " . $textFileType . " " . $rdfGraphName;
 	}
 }
 
