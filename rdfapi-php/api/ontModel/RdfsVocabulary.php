@@ -15,7 +15,9 @@
 * @package 	ontModel
 * @access	public
 **/
-class RdfsVocabulary extends OntVocabulary 
+include_once("OntVocabulary.php");
+include_once(RDFAPI_INCLUDE_DIR . "resModel/ResProperty.php");
+class RdfsVocabulary extends OntVocabulary
 {
 
 	/**
@@ -124,7 +126,7 @@ class RdfsVocabulary extends OntVocabulary
    	* @return	string
    	* @access	public
    	*/
-	function NAMESPACE()
+	function rdfNAMESPACE()
 	{
 		return RDF_SCHEMA_URI;
 	}

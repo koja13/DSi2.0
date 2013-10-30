@@ -14,6 +14,7 @@
 * @package resModel
 * @access	public
 **/
+include_once("ResResource.php");
 class ResProperty extends ResResource  
 {
 	

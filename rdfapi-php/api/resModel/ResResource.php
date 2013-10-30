@@ -19,8 +19,7 @@
 * @package resModel
 * @access	public
 **/
-class ResResource extends Resource 
-{
+class ResResource extends Resource {
 	/**
 	* Holds a reference to the associated model
 	* @var		ResModel

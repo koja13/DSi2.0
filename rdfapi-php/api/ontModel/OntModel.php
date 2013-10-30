@@ -29,6 +29,9 @@
 * @package 	ontModel
 * @access	public
 **/
+
+include_once("OntClass.php");
+include_once("OntProperty.php");
 class OntModel extends ResModel 
 {
 	/**

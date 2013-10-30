@@ -15,6 +15,10 @@
 * @package 	ontModel
 * @access	public
 **/
+
+//define("RDFAPI_INCLUDE_DIR", "././rdfapi-php/api/");
+include_once(RDFAPI_INCLUDE_DIR . "resModel/ResResource.php");
+
 class OntResource extends ResResource 
 {
 	/**

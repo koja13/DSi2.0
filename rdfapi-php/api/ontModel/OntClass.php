@@ -15,6 +15,8 @@
 * @package 	ontModel
 * @access	public
 **/
+
+include_once("OntResource.php");
 class OntClass extends OntResource 
 {
 	/**
