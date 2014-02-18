@@ -266,11 +266,11 @@ class RdfController extends CI_Controller {
 
 				if($it->hasNext())
 				{
-					echo "span:contains(" . $statement->getLabelObject() . "),";
+					echo "span.dragdrop:contains(" . $statement->getLabelObject() . "),";
 				}
 				else
 				{
-					echo "span:contains(" . $statement->getLabelObject() . ")";
+					echo "span.dragdrop:contains(" . $statement->getLabelObject() . ")";
 				}
 			}
 				
