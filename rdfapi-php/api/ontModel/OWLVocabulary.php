@@ -350,10 +350,10 @@ class OWLVocabulary extends OntVocabulary
 		return new ResProperty(OWL_NS . 'versionInfo');
 	}
 
-	function NAMESPACE()
+	/*function NAMESPACE()
 	{
 		return OWL_NS;
-	}
+	}*/
 
 	/**
 	* Answer the predicate that denotes the rdf:type property.
